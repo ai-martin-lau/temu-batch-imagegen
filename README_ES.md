@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="README.md">English</a> · <a href="README_ZH.md">简体中文</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
+  <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
 </p>
 
 # Generador por lotes de imágenes de producto para TEMU
@@ -76,7 +76,7 @@ codex **procesará cada unidad en `input/`** (imágenes sueltas + carpetas, sin 
 
 ```
 temu-batch-imagegen/
-├── README.md           # inglés (predeterminado)
+├── README.md           # chino simplificado (predeterminado)
 ├── README_ES.md        # este archivo
 ├── SKILL.md            # flujo de ejecución de codex (codex lo lee)
 ├── 批量出图.command     # lanzador de doble clic (macOS, usuarios no técnicos)

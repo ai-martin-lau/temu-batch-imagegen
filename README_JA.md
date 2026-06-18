@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="README.md">English</a> · <a href="README_ZH.md">简体中文</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
+  <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
 </p>
 
 # TEMU 商品画像 一括生成ツール
@@ -76,7 +76,7 @@ codex は **`input/` 内の全ユニット**（単一画像 + フォルダ、質
 
 ```
 temu-batch-imagegen/
-├── README.md           # 英語（デフォルト）
+├── README.md           # 簡体中国語（デフォルト）
 ├── README_JA.md        # 本ファイル
 ├── SKILL.md            # codex 実行フロー（codex が読む）
 ├── 批量出图.command     # ダブルクリック起動（macOS、非技術ユーザー向け）
