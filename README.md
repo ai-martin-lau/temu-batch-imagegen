@@ -1,103 +1,112 @@
-# TEMU 商品图批量出图助手
+<p align="center">
+  <a href="README.md">English</a> · <a href="README_ZH.md">简体中文</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
+</p>
 
-把 `input/` 里的【一批商品输入】（每个商品可以是**一张图片**，也可以是**一个文件夹=同一商品的多张参考组图**），按各自匹配的【中文创意 prompt】，用 **codex 内置 image_gen**（走你的 codex 订阅，**免 API key**）各批量生成 N 张电商主图 / 套图，自动落到 `output/`。
+<p align="center"><img src="docs/cover.png" alt="TEMU Product-Image Batch Generator" width="100%"></p>
 
-适合：把一批实拍图，按风格各扩成 TEMU / 跨境电商 / 网店的主图 + 套图。
+# TEMU Product-Image Batch Generator
+
+Drop a batch of product inputs into `input/` — each product can be **a single image** or **a folder (multiple reference shots of the same product)** — and this tool generates N e-commerce main images / image sets for each one, following its matching creative prompt, using **codex's built-in `image_gen`** (runs on your codex subscription, **no API key needed**). Results land in `output/`.
+
+Good for: turning a batch of real product photos into TEMU / cross-border / online-store main images + image sets, each in the style you specify.
 
 ---
 
-## 一、准备（一次性）
+## 1. Prerequisites (one time)
 
-只需要 **codex CLI 并已登录**（你有 codex 订阅即可）：
+You only need the **codex CLI, logged in** (a codex subscription is enough):
 
 ```bash
-codex --version      # 能打印版本即可
-codex login          # 若未登录，按提示登录
+codex --version      # should print a version
+codex login          # log in if you haven't
 ```
 
-无需 Python、无需 OPENAI_API_KEY、无需装任何额外东西。
+No Python, no `OPENAI_API_KEY`, nothing else to install.
 
 ---
 
-## 二、把它接入 codex
+## 2. Install into codex
 
-把整个 `temu-batch-imagegen/` 文件夹放进 codex 的 skills 目录：
+Drop the whole `temu-batch-imagegen/` folder into codex's skills directory:
 
 ```bash
 cp -R temu-batch-imagegen ~/.codex/skills/
 ```
 
-> 也可以不放进 skills 目录，直接 `cd` 进本文件夹用（见"方式 B"）。
+> You can also skip the skills directory and just `cd` into this folder to use it (see "Option B").
 
 ---
 
-## 三、怎么用
+## 3. How to use
 
-> 核心约定：**input/ 里所有单元（单图 + 组图文件夹）都会被处理，不会问你"用哪个 / 哪个 prompt / 几张"**——这三件都已确定（全处理、按名字匹配 prompt、张数看 prompt 文本）。
+> Core convention: **every unit in `input/` (single images + image folders) is processed. You are never asked "which one / which prompt / how many"** — all three are predetermined (process everything, match prompts by name, count comes from the prompt text).
 
-### 最省事：双击 `批量出图.command`（给非技术用户）
-把图丢进 `input/`，**双击 `批量出图.command`** 即可——会自动打开终端、跑完后弹出 `output/` 文件夹。
-- input/ 为空会友好提示并打开 input 文件夹；没装/没登录 codex 会明确报错。
-- 首次双击若被 macOS 拦，**右键 → 打开**确认一次即可。
-- 前提同样是 **codex 已安装 + 登录**。
+### Easiest: double-click `批量出图.command` (for non-technical users)
+Drop images into `input/`, then **double-click `批量出图.command`** — it opens a terminal, runs the batch, and pops open the `output/` folder when done.
+- If `input/` is empty it shows a friendly message and opens the input folder; if codex isn't installed / logged in it errors clearly.
+- On first double-click, if macOS blocks it, **right-click → Open** once to confirm.
+- Same requirement: **codex installed + logged in**.
 
-### 方式 A：一条命令批量（推荐，终端用户）
-1. 把要出图的**输入**放进 `input/`，两种形态可混放：
-   - **单张图片**（`连衣裙.png`）= 一个商品，1 张参考图；
-   - **一个文件夹**（`牛仔裤/`，里面放同一商品的多张照片）= 一个商品的**组图**，夹内多张会一起作为多角度参考喂给同一会话。
-2. 准备 prompt（`prompt/*.txt`，纯中文写需求）：通用的命名为 `默认.txt`；要给某个商品单独定制，就建一个和**图片名或文件夹名同名**的 `.txt`。
-3. 在本文件夹里跑：
+### Option A: one command (recommended, terminal users)
+1. Put your **inputs** into `input/`. Two forms can be mixed:
+   - **A single image** (`dress.png`) = one product, one reference shot;
+   - **A folder** (`jeans/`, holding several photos of the same product) = one product's **image set**; all photos inside are fed into the same session as multi-angle references.
+2. Prepare prompts (`prompt/*.txt`, plain natural-language requirements): the generic one is named `默认.txt` ("default"); to customize a specific product, create a `.txt` **named after the image or folder**.
+3. Run, inside this folder:
 
 ```bash
-bash batch.sh            # 默认最多 3 个进程并发
-MAX=5 bash batch.sh      # 想更快就调大并发（注意 codex 订阅可能限流）
+bash batch.sh            # up to 3 parallel processes by default
+MAX=5 bash batch.sh      # raise concurrency to go faster (mind your codex rate limits)
 ```
 
-- **一图一进程**：每张图各起一个独立 codex 会话，互不干扰；默认 3 个并行，**失败的自动回退串行重试**。
-- **prompt 自动匹配**：每个单元按【名字】（图片名 / 文件夹名）找 `prompt/<名字>.txt`；没同名用 `prompt/默认.txt`；`prompt/` 里只有一个 `.txt` 时所有单元都用它。
-- **出几张写在 prompt 里**（如"输出 6 张 3:4 + 1 张 1000×1000"），改张数只改 prompt 文本，命令不用动。
-- 成品落 `output/batch-<时间戳>/<原图名>/01.png 02.png …`，日志在该目录 `.logs/`；脚本结束自动跑一遍尺寸自检。
+- **One image, one process**: each image gets its own independent codex session; default 3 in parallel, and **failures automatically fall back to serial retry**.
+- **Automatic prompt matching**: each unit looks up `prompt/<name>.txt` by its **name** (image / folder name); if there's no same-name file it uses `prompt/默认.txt`; if `prompt/` has only one `.txt`, every unit uses it.
+- **The number of images is written in the prompt** (e.g. "output 6 × 3:4 + 1 × 1000×1000"); to change the count, edit the prompt text — the command stays the same.
+- Results land in `output/batch-<timestamp>/<image-name>/01.png 02.png …`, logs in that folder's `.logs/`; the script runs a size self-check at the end.
 
-### 方式 B：让 codex 跑（自动，不问问题）
-把原图丢进 `input/`、prompt 放好后，在本文件夹启动 codex，对它说：
-> 用 temu-batch-imagegen 这个 skill 帮我出图
+### Option B: let codex run it (autonomous, no questions)
+With images in `input/` and prompts in place, start codex in this folder and tell it:
+> Use the temu-batch-imagegen skill to generate my images
 
-codex 会**自动处理 `input/` 里的全部单元**（单图 + 组图文件夹，不问任何问题），按同样规则边生成边落到 `output/batch-时间戳/<单元名>/`。
+codex will **process every unit in `input/`** (single images + folders, no questions), generating and writing to `output/batch-<timestamp>/<unit-name>/` by the same rules.
 
-> 只有 1 个商品也一样跑 `bash batch.sh`——脚本会自动只处理这一个，无需单独命令。
+> A single product runs the same `bash batch.sh` — the script just processes that one, no special command needed.
 
 ---
 
-## 四、目录
+## 4. Layout
 
 ```
 temu-batch-imagegen/
-├── README.md           # 本文件
-├── SKILL.md            # codex 执行流程（codex 读这个）
-├── 批量出图.command     # 双击即跑的启动器（macOS，非技术用户用）
-├── batch.sh            # 批量出图：input/ 每张图各起独立会话，并发3+失败回退串行
-├── input/              # 放【单图】或【组图文件夹】（.png/.jpg/.webp，可混放）
-│   ├── 连衣裙.png       #   单图 = 一个商品
-│   └── 牛仔裤/          #   文件夹 = 一个商品的组图（多张多角度参考）
-├── prompt/             # 中文创意 prompt 模板（.txt；按名匹配，通用的命名为 默认.txt）
+├── README.md           # this file
+├── SKILL.md            # codex execution flow (codex reads this)
+├── 批量出图.command     # double-click launcher (macOS, for non-technical users)
+├── batch.sh            # batch generator: one session per image, 3 parallel + serial fallback
+├── input/              # put [single images] or [image folders] here (.png/.jpg/.webp, mixable)
+│   ├── dress.png       #   single image = one product
+│   └── jeans/          #   folder = one product's image set (multi-angle references)
+├── prompt/             # creative prompt templates (.txt; matched by name, generic one = 默认.txt)
 │   └── 默认.txt
-├── output/             # 出图：batch-时间戳/<单元名>/01.png 02.png …
-└── example/            # 可运行范例（和真实项目同样布局：input + prompt + output）
+├── output/             # results: batch-<timestamp>/<unit-name>/01.png 02.png …
+└── example/            # runnable sample (same layout as a real project: input + prompt + output)
     ├── input/product.png
-    ├── prompt/默认.txt
-    └── output/product/01.png … 07.png
+    └── prompt/默认.txt
 ```
 
 ---
 
-## 五、写 prompt 的几点经验
+## 5. Tips for writing prompts
 
-- **纯中文写**即可，像写需求一样把"商品 / 风格 / 要求"列清楚（参考 `prompt/默认.txt`，就是一份真实需求）。
-- 想要图上带外语文案（如日文卖点），在 prompt 里用中文说明即可，例如"日文文案自然高级"。
-- **把所有要求写明确**：你要什么就写什么——尺寸、颜色还原、风格、要不要露脸、背景、品牌 logo 怎么处理……都按你的商品和平台来定，工具只照 prompt 执行、**不替你假设任何约束**。
-- 想要一套 N 张且**每张不同**，就在 prompt 里写明"每张独立生成、各张要有变化（姿势/场景等）"，避免出成"同一张换文字"。
+- **Write in plain language**, like a brief — spell out "product / style / requirements" (see `prompt/默认.txt`, which is a real brief).
+- Want foreign-language copy on the image (e.g. Japanese selling points)? Just say so in the prompt, e.g. "natural, refined Japanese copy".
+- **State every requirement explicitly**: whatever you want — size, color fidelity, style, faces or no faces, background, how to handle brand logos — set it per your product and platform. The tool only follows the prompt and **assumes no constraints for you**.
+- For a set of N images that are **each different**, say so in the prompt: "generate each independently, vary each one (pose/scene/etc.)" to avoid "same image, different text".
 
-## 六、注意
+## 6. Notes
 
-- **图上外语文案可能出错字**：图像模型渲染外语偶尔会写错字，出图后逐张核对；不满意的单张让 codex **只重生这一张**即可。对"必须 100% 准确"的文字，建议先出纯图、文案后期用工具精确叠加。
-- 中间产物会留在 codex 默认目录 `~/.codex/generated_images/`，最终成品在本项目 `output/`。
+- **Foreign text on images may have typos**: image models occasionally misspell foreign-language text. Check each result; for any you don't like, ask codex to **regenerate just that one**. For text that must be 100% accurate, generate clean images first and overlay the copy precisely later with another tool.
+- Intermediate files stay in codex's default directory `~/.codex/generated_images/`; final results are in this project's `output/`.
+
+---
+
+*Generation runs on codex's built-in `image_gen` (your subscription), so there's no API key to manage. This is the macOS version.*
