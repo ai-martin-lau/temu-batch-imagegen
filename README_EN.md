@@ -1,5 +1,9 @@
 <p align="center">
-  <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
+  <a href="README.md">English</a> · <a href="README_ZH.md">简体中文</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
+</p>
+
+<p align="center">
+  <img src="docs/cover.png" alt="TEMU Batch Image Generator" width="100%">
 </p>
 
 # TEMU Product-Image Batch Generator
@@ -76,8 +80,9 @@ codex will **process every unit in `input/`** (single images + folders, no quest
 
 ```
 temu-batch-imagegen/
-├── README.md           # 简体中文 (default)
-├── README_EN.md        # this file
+├── README.md           # English (default)
+├── README_ZH.md        # Simplified Chinese
+├── README_EN.md        # English (legacy link)
 ├── SKILL.md            # codex execution flow (codex reads this)
 ├── 批量出图.command     # double-click launcher (macOS, for non-technical users)
 ├── batch.sh            # batch generator: one session per image, 3 parallel + serial fallback
