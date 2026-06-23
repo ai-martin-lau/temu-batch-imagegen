@@ -76,8 +76,8 @@ codex 会**自动处理 `input/` 里的全部单元**（单图 + 组图文件夹
 
 ```
 temu-batch-imagegen/
-├── README.md           # 本文件（中文，默认）
-├── README_EN.md        # English
+├── README.md           # English (default)
+├── README_ZH.md        # 简体中文
 ├── SKILL.md            # codex 执行流程（codex 读这个）
 ├── 批量出图.command     # 双击即跑的启动器（macOS，非技术用户用）
 ├── batch.sh            # 批量出图：input/ 每张图各起独立会话，并发3+失败回退串行

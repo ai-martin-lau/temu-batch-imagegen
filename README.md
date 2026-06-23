@@ -82,7 +82,6 @@ codex will **process every unit in `input/`** (single images + folders, no quest
 temu-batch-imagegen/
 ├── README.md           # English (default)
 ├── README_ZH.md        # Simplified Chinese
-├── README_EN.md        # English (legacy link)
 ├── SKILL.md            # codex execution flow (codex reads this)
 ├── 批量出图.command     # double-click launcher (macOS, for non-technical users)
 ├── batch.sh            # batch generator: one session per image, 3 parallel + serial fallback
