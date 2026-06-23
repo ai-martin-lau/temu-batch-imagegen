@@ -2,10 +2,6 @@
   <a href="README.md">English</a> · <a href="README_ZH.md">简体中文</a> · <a href="README_JA.md">日本語</a> · <a href="README_KO.md">한국어</a> · <a href="README_ES.md">Español</a>
 </p>
 
-<p align="center">
-  <img src="docs/cover.png" alt="TEMU Batch Image Generator" width="100%">
-</p>
-
 # TEMU 商品图批量出图助手
 
 把 `input/` 里的【一批商品输入】（每个商品可以是**一张图片**，也可以是**一个文件夹=同一商品的多张参考组图**），按各自匹配的【中文创意 prompt】，用 **codex 内置 image_gen**（走你的 codex 订阅，**免 API key**）各批量生成 N 张电商主图 / 套图，自动落到 `output/`。
